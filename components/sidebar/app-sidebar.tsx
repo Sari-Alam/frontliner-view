@@ -1,22 +1,13 @@
-"use client";
+"use client"
 
-import { usePathname } from "next/navigation";
+import { usePathname } from "next/navigation"
 
 import {
-  CalendarClockIcon,
-  Clock10Icon,
-  Clock3Icon,
-  GitBranchPlus,
-  GroupIcon,
-  HardHatIcon,
-  HistoryIcon,
-  ListEndIcon,
-  ListTodoIcon,
-  TimerIcon,
-  ToyBrickIcon,
-  UserCheck2Icon,
+  LayoutDashboardIcon,
+  ListPlusIcon,
   UserCheckIcon,
-} from "lucide-react";
+  UsersIcon,
+} from "lucide-react"
 
 import {
   Sidebar,
@@ -27,104 +18,47 @@ import {
   SidebarMenuGroupContent,
   SidebarMenuHeader,
   SidebarMenuItem,
-} from "./sidebar-primitives";
+} from "./sidebar-primitives"
 
 export default function AppSidebar() {
-  const pathname = usePathname();
+  const pathname = usePathname()
 
   const menuGroups = [
     {
-      headerTitle: "OPERASIONAL",
+      headerTitle: "MENU",
       menuHeaderInit: "open",
       menus: [
         {
-          title: "Cuti",
-          url: "/dashboard/cuti",
-          icon: <UserCheck2Icon className="w-4 shrink-0" />,
+          title: "Dashboard",
+          url: "/app/dashboard",
+          icon: <LayoutDashboardIcon className="w-4 shrink-0" />,
         },
         {
           title: "Absensi",
-          url: "/dashboard/absensi",
+          url: "/app/absensi",
           icon: <UserCheckIcon className="w-4 shrink-0" />,
         },
         {
-          title: "Overtime",
-          url: "/dashboard/overtime",
-          icon: <Clock10Icon className="w-4 shrink-0" />,
+          title: "Enrollment",
+          url: "/app/enrollment",
+          icon: <ListPlusIcon className="w-4 shrink-0" />,
         },
         {
-          title: "Log Aktivitas",
-          url: "/dashboard/log-aktifitas",
-          icon: <HistoryIcon className="w-4 shrink-0" />,
+          title: "Data Pegawai",
+          url: "/app/data-pegawai",
+          icon: <UsersIcon className="w-4 shrink-0" />,
         },
       ],
     },
-    {
-      headerTitle: "PENGATURAN",
-      menuHeaderInit: "open",
-      menus: [
-        {
-          title: "Shift",
-          url: "/dashboard/shift",
-          icon: <Clock3Icon className="w-4 shrink-0" />,
-        },
-        {
-          title: "Jadwal Masuk",
-          url: "/dashboard/jadwal-masuk",
-          icon: <TimerIcon className="w-4 shrink-0" />,
-        },
-        {
-          title: "Data Karyawan",
-          url: "/dashboard/data-karyawan",
-          icon: <GroupIcon className="w-4 shrink-0" />,
-        },
-        {
-          title: "Cuti Nasional",
-          url: "/dashboard/cuti-nasional",
-          icon: <CalendarClockIcon className="w-4 shrink-0" />,
-        },
-      ],
-    },
-    {
-      headerTitle: "REFERENSI",
-      menuHeaderInit: "open",
-      menus: [
-        {
-          title: "Cabang Perusahaan",
-          url: "/dashboard/cabang-perusahaan",
-          icon: <GitBranchPlus className="w-4 shrink-0" />,
-        },
-        {
-          title: "Departemen",
-          url: "/dashboard/departemen",
-          icon: <ToyBrickIcon className="w-4 shrink-0" />,
-        },
-        {
-          title: "Jabatan",
-          url: "/dashboard/jabatan",
-          icon: <HardHatIcon className="w-4 shrink-0" />,
-        },
-        {
-          title: "Kategori Shift",
-          url: "/dashboard/kategori-shift",
-          icon: <ListEndIcon className="w-4 shrink-0" />,
-        },
-        {
-          title: "Kategori Cuti",
-          url: "/dashboard/kategori-cuti",
-          icon: <ListTodoIcon className="w-4 shrink-0" />,
-        },
-      ],
-    },
-  ];
+  ]
 
   const getSidebarItemActiveStatus = (pathname: string, itemUrl: string) => {
-    const regex = /^(\/dashboard\/[^\/]+)\/.*$/;
+    const regex = /^(\/app\/[^\/]+)\/.*$/
 
     // This replaces the entire string with just the content of the first capturing group
-    const parentRoute = pathname.replace(regex, "$1");
-    return parentRoute === itemUrl;
-  };
+    const parentRoute = pathname.replace(regex, "$1")
+    return parentRoute === itemUrl
+  }
 
   return (
     <Sidebar>
@@ -154,5 +88,5 @@ export default function AppSidebar() {
       </SidebarContent>
       <SidebarFooter />
     </Sidebar>
-  );
+  )
 }
