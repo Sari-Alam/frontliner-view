@@ -1,23 +1,23 @@
 import { Plus_Jakarta_Sans } from "next/font/google"
 
 import "./globals.css"
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils"
 
 import { ThemeProvider } from "@/components/theme-provider"
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { Toaster } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip"
+import { Toaster } from "@/components/ui/sonner"
 
 const fontSans = Plus_Jakarta_Sans({
-    subsets: ["latin"],
-    variable: "--font-sans",
+  subsets: ["latin"],
+  variable: "--font-sans",
 })
 
 export const metadata = {
-    title: "Sari Alam - Frontliner View",
-    description: "Frontliner View",
-    icons: {
-        icon: '/favicon.ico',
-    },
+  title: "Sari Alam - Frontliner View",
+  description: "Frontliner View",
+  icons: {
+    icon: "/favicon.ico",
+  },
 }
 
 export default function RootLayout({
@@ -25,20 +25,20 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-    return (
-        <html
-            lang="en"
-            suppressHydrationWarning
-            className={cn("antialiased", 'font-sans', fontSans.variable)}
-        >
-            <body>
-                <ThemeProvider>
-                    <TooltipProvider>
-                        {children}
-                        <Toaster />
-                    </TooltipProvider>
-                </ThemeProvider>
-            </body>
-        </html>
+  return (
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={cn("antialiased", "font-sans", fontSans.variable)}
+    >
+      <body>
+        <ThemeProvider>
+          <TooltipProvider>
+            {children}
+            <Toaster position="top-center" />
+          </TooltipProvider>
+        </ThemeProvider>
+      </body>
+    </html>
   )
 }
