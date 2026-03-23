@@ -85,7 +85,7 @@ export function EnrollmentTableSkeleton() {
       <div className="flex h-9 w-full items-center px-4">
         <Skeleton className="h-4 w-full" />
       </div>
-      <div className="flex h-9 w-full items-center border-x border-border px-4">
+      <div className="flex h-9 w-full items-center px-4">
         <Skeleton className="h-4 w-full" />
       </div>
       <div className="flex h-9 w-full items-center px-4">

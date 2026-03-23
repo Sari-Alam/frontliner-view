@@ -73,7 +73,11 @@ export default async function EnrollmentPage({
         <ScrollArea className="h-[calc(100dvh-54px-24px)] min-h-0">
           <Suspense
             key={JSON.stringify(params)}
-            fallback={<EnrollmentTableSkeleton />}
+            fallback={
+              <div className="py-10 pb-13">
+                <EnrollmentTableSkeleton />
+              </div>
+            }
           >
             <EnrollmentListServer params={params} />
           </Suspense>

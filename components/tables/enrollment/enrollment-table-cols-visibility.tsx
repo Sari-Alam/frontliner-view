@@ -45,7 +45,7 @@ export default function EnrollmentTableColumnsVisibility() {
           />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-max">
+      <DropdownMenuContent className="w-max" align="end">
         <DropdownMenuGroup>
           {columns.map((column) => (
             <DropdownMenuCheckboxItem
