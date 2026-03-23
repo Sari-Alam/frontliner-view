@@ -20,7 +20,6 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { cn } from "@/lib/utils"
-import { Button } from "../ui/button"
 
 export default function AppPagination() {
   const router = useRouter()

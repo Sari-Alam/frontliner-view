@@ -3,6 +3,8 @@ import { Plus_Jakarta_Sans } from "next/font/google"
 import "./globals.css"
 import { cn } from "@/lib/utils"
 
+import QueryClientRootLayout from "@/providers/query-clients-provider"
+
 import { ThemeProvider } from "@/components/theme-provider"
 import { TooltipProvider } from "@/components/ui/tooltip"
 import { Toaster } from "@/components/ui/sonner"
@@ -32,12 +34,14 @@ export default function RootLayout({
       className={cn("antialiased", "font-sans", fontSans.variable)}
     >
       <body>
-        <ThemeProvider>
-          <TooltipProvider>
-            {children}
-            <Toaster position="top-center" />
-          </TooltipProvider>
-        </ThemeProvider>
+        <QueryClientRootLayout>
+          <ThemeProvider>
+            <TooltipProvider>
+              {children}
+              <Toaster position="top-center" />
+            </TooltipProvider>
+          </ThemeProvider>
+        </QueryClientRootLayout>
       </body>
     </html>
   )
