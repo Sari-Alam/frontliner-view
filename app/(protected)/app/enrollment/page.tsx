@@ -28,7 +28,9 @@ async function EnrollmentListServer({
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <EnrollmentListRenderer />
+      <div className="py-10 pb-13">
+        <EnrollmentListRenderer />
+      </div>
     </HydrationBoundary>
   )
 }
@@ -48,8 +50,8 @@ export default async function EnrollmentPage({
   const params = EnrollmentQuerySchema.parse(rawParams)
 
   return (
-    <section className="grid flex-1 grid-rows-[auto_1fr_auto] gap-2">
-      <div className="flex w-full shrink-0 items-center justify-between">
+    <section className="relative flex flex-1 flex-col gap-2">
+      <div className="absolute top-0 left-0 z-20 flex w-full shrink-0 items-center justify-between bg-linear-to-b from-slate-200 via-slate-200/90 to-transparent pb-2 dark:from-background dark:via-background/90">
         <MultiSelectFilter
           buttonLabel="Semua status enrollment"
           checkBoxLabel="Status Enrollment"
@@ -66,7 +68,7 @@ export default async function EnrollmentPage({
       </div>
 
       <div className="h-full">
-        <ScrollArea className="h-[calc(100vh-54px-32px-34px-40px)] min-h-0">
+        <ScrollArea className="h-[calc(100dvh-54px-24px)] min-h-0">
           <Suspense
             key={JSON.stringify(params)}
             fallback={<EnrollmentTableSkeleton />}
@@ -76,7 +78,7 @@ export default async function EnrollmentPage({
         </ScrollArea>
       </div>
 
-      <div className="shrink-0">
+      <div className="absolute bottom-0 left-0 z-20 w-full shrink-0 bg-linear-to-t from-slate-200 via-slate-200/90 to-transparent pt-2 dark:from-background dark:via-background/90">
         <AppPagination />
       </div>
     </section>

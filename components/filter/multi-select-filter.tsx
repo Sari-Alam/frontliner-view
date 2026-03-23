@@ -67,7 +67,7 @@ export default function MultiSelectFilter({
   return (
     <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="cursor-pointer gap-2">
+        <Button variant="outline" className="cursor-pointer gap-2 bg-card!">
           {buttonLabel}
           <ChevronDownIcon
             className={cn(

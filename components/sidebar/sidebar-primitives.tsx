@@ -66,7 +66,7 @@ export function Sidebar({
     <SidebarContext.Provider value={{ isOpen, toggle }}>
       <aside
         className={cn(
-          "animate-all grid h-[calc(100dvh-16px)] grid-rows-[max-content_1fr_max-content] rounded-2xl border border-border bg-card transition-all duration-300 ease-in-out",
+          "animate-all grid h-[calc(100dvh-16px)] grid-rows-[max-content_1fr_max-content] rounded-2xl border border-border bg-card transition-all ease-in-out",
           className,
           isOpen ? "w-[16em]" : "w-22"
         )}

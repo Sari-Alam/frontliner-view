@@ -31,7 +31,7 @@ export default function SearchFilter({ placeholder = "" }: Props) {
       placeholder={placeholder}
       defaultValue={searchParams.get("search")?.toString()}
       onChange={(e) => debouncedSearch(e.target.value)}
-      className="bg-background"
+      className="bg-card!"
     />
   )
 }
