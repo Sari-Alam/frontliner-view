@@ -1,21 +1,32 @@
-import { Button } from "@/components/ui/button"
-import { Enrollment } from "@/lib/data-schema"
 import { cn } from "@/lib/utils"
-import { useEnrollmentTableStore } from "@/stores/enrollment-table-store"
+import { Enrollment } from "@/lib/data-schema"
 import { ColumnDef } from "@tanstack/react-table"
 import { MoreHorizontalIcon } from "lucide-react"
+import { useEnrollmentTableStore } from "@/stores/enrollment-table-store"
+import { useShallow } from "zustand/shallow"
+
+import { Button } from "@/components/ui/button"
+import TableHeaderQuickAction from "@/components/tables/table-header-quick-action"
 
 export const enrollmentTableColumns: ColumnDef<Enrollment>[] = [
   {
     accessorKey: "name",
     header: () => {
-      const visibleColumns = useEnrollmentTableStore((s) => s.visibleColumns)
+      const { visibleColumns, toggleColumn } = useEnrollmentTableStore(
+        useShallow((s) => ({
+          visibleColumns: s.visibleColumns,
+          toggleColumn: s.toggleColumn,
+        }))
+      )
       const isVisibles = visibleColumns.includes("name")
 
       return (
-        <div className={cn("text-sm font-semibold", !isVisibles && "hidden")}>
-          Name
-        </div>
+        <TableHeaderQuickAction
+          isVisible={isVisibles}
+          columnName="name"
+          buttonLabel="Nama"
+          toggleColumn={toggleColumn}
+        />
       )
     },
     cell: ({ row }) => {
@@ -23,7 +34,7 @@ export const enrollmentTableColumns: ColumnDef<Enrollment>[] = [
       const isVisibles = visibleColumns.includes("name")
 
       return (
-        <div className={cn("", !isVisibles && "hidden")}>
+        <div className={cn("px-3", !isVisibles && "hidden")}>
           {row.getValue("name")}
         </div>
       )
@@ -32,13 +43,21 @@ export const enrollmentTableColumns: ColumnDef<Enrollment>[] = [
   {
     accessorKey: "nip",
     header: () => {
-      const visibleColumns = useEnrollmentTableStore((s) => s.visibleColumns)
+      const { visibleColumns, toggleColumn } = useEnrollmentTableStore(
+        useShallow((s) => ({
+          visibleColumns: s.visibleColumns,
+          toggleColumn: s.toggleColumn,
+        }))
+      )
       const isVisibles = visibleColumns.includes("nip")
 
       return (
-        <div className={cn("text-sm font-semibold", !isVisibles && "hidden")}>
-          NIP
-        </div>
+        <TableHeaderQuickAction
+          isVisible={isVisibles}
+          columnName="nip"
+          buttonLabel="NIP"
+          toggleColumn={toggleColumn}
+        />
       )
     },
     cell: ({ row }) => {
@@ -46,7 +65,7 @@ export const enrollmentTableColumns: ColumnDef<Enrollment>[] = [
       const isVisibles = visibleColumns.includes("nip")
 
       return (
-        <div className={cn("", !isVisibles && "hidden")}>
+        <div className={cn("px-3", !isVisibles && "hidden")}>
           {row.getValue("nip")}
         </div>
       )
@@ -55,13 +74,21 @@ export const enrollmentTableColumns: ColumnDef<Enrollment>[] = [
   {
     accessorKey: "has_face",
     header: () => {
-      const visibleColumns = useEnrollmentTableStore((s) => s.visibleColumns)
+      const { visibleColumns, toggleColumn } = useEnrollmentTableStore(
+        useShallow((s) => ({
+          visibleColumns: s.visibleColumns,
+          toggleColumn: s.toggleColumn,
+        }))
+      )
       const isVisibles = visibleColumns.includes("has_face")
 
       return (
-        <div className={cn("text-sm font-semibold", !isVisibles && "hidden")}>
-          Pendaftaran wajah
-        </div>
+        <TableHeaderQuickAction
+          isVisible={isVisibles}
+          columnName="has_face"
+          buttonLabel="Pendaftaran wajah"
+          toggleColumn={toggleColumn}
+        />
       )
     },
     cell: ({ row }) => {
@@ -80,7 +107,7 @@ export const enrollmentTableColumns: ColumnDef<Enrollment>[] = [
       return (
         <div
           className={cn(
-            "w-max rounded-full border px-2 py-0.5 text-xs",
+            "ml-3 w-max rounded-full border px-2 py-0.5 text-xs",
             isEnrolled ? badgeColor.enrolled : badgeColor.not_enrolled,
             !isVisibles && "hidden"
           )}
