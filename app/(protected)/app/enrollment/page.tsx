@@ -8,11 +8,12 @@ import {
 } from "@/lib/api/enrollments"
 
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { EnrollmentTableSkeleton } from "@/components/tables/enrollment-table"
+import { EnrollmentTableSkeleton } from "@/components/tables/enrollment/enrollment-table"
 import MultiSelectFilter from "@/components/filter/multi-select-filter"
 import AppPagination from "@/components/pagination/app-paginations"
 import EnrollmentListRenderer from "@/components/renderer/enrollment-table-renderer"
 import SearchFilter from "@/components/filter/search-filter"
+import EnrollmentTableColumnsVisibility from "@/components/tables/enrollment/enrollment-table-cols-visibility"
 
 async function EnrollmentListServer({
   params,
@@ -62,8 +63,9 @@ export default async function EnrollmentPage({
           ]}
         />
 
-        <div>
+        <div className="flex items-center gap-2">
           <SearchFilter placeholder="Cari karyawan" />
+          <EnrollmentTableColumnsVisibility />
         </div>
       </div>
 

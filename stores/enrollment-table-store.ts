@@ -1,18 +1,18 @@
 import { create } from "zustand"
 
 interface TableUIState {
-  selectedIds: string[]
-  toggleSelection: (id: string) => void
-  resetSelection: () => void
+  visibleColumns: string[]
+  toggleColumn: (id: string) => void
+  resetColumns: () => void
 }
 
 export const useEnrollmentTableStore = create<TableUIState>((set) => ({
-  selectedIds: [],
-  toggleSelection: (id) =>
+  visibleColumns: ["name", "nip", "has_face"],
+  toggleColumn: (id) =>
     set((state) => ({
-      selectedIds: state.selectedIds.includes(id)
-        ? state.selectedIds.filter((i) => i !== id)
-        : [...state.selectedIds, id],
+      visibleColumns: state.visibleColumns.includes(id)
+        ? state.visibleColumns.filter((i) => i !== id)
+        : [...state.visibleColumns, id],
     })),
-  resetSelection: () => set({ selectedIds: [] }),
+  resetColumns: () => set({ visibleColumns: [] }),
 }))
