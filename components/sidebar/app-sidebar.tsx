@@ -10,6 +10,7 @@ import {
 } from "lucide-react"
 
 import {
+  ProtectedSidebarMenuItem,
   Sidebar,
   SidebarContent,
   SidebarFooter,
@@ -32,21 +33,25 @@ export default function AppSidebar() {
           title: "Dashboard",
           url: "/app/dashboard",
           icon: <LayoutDashboardIcon className="w-4 shrink-0" />,
+          protected: false,
         },
         {
           title: "Absensi",
           url: "/app/absensi",
           icon: <UserCheckIcon className="w-4 shrink-0" />,
+          protected: true,
         },
         {
           title: "Enrollment",
           url: "/app/enrollment",
           icon: <ListPlusIcon className="w-4 shrink-0" />,
+          protected: true,
         },
         {
           title: "Data Pegawai",
           url: "/app/data-pegawai",
           icon: <UsersIcon className="w-4 shrink-0" />,
+          protected: true,
         },
       ],
     },
@@ -72,16 +77,27 @@ export default function AppSidebar() {
             />
 
             <SidebarMenuGroupContent menuId={mng.headerTitle}>
-              {mng.menus.map((menu) => (
-                <SidebarMenuItem
-                  url={menu.url}
-                  key={menu.title}
-                  active={getSidebarItemActiveStatus(pathname, menu.url)}
-                >
-                  {menu.icon}
-                  <span>{menu.title}</span>
-                </SidebarMenuItem>
-              ))}
+              {mng.menus.map((menu) =>
+                menu.protected ? (
+                  <ProtectedSidebarMenuItem
+                    url={menu.url}
+                    key={menu.title}
+                    active={getSidebarItemActiveStatus(pathname, menu.url)}
+                  >
+                    {menu.icon}
+                    <span>{menu.title}</span>
+                  </ProtectedSidebarMenuItem>
+                ) : (
+                  <SidebarMenuItem
+                    url={menu.url}
+                    key={menu.title}
+                    active={getSidebarItemActiveStatus(pathname, menu.url)}
+                  >
+                    {menu.icon}
+                    <span>{menu.title}</span>
+                  </SidebarMenuItem>
+                )
+              )}
             </SidebarMenuGroupContent>
           </SidebarMenuGroup>
         ))}

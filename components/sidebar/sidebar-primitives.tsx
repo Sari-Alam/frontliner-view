@@ -1,16 +1,28 @@
-import React, { createContext, useContext, useEffect, useState } from "react"
-
+import Link from "next/link"
+import Image from "next/image"
+import { useRouter } from "next/navigation"
+import { createContext, useContext, useEffect, useState } from "react"
 import { ChevronLeftIcon, LogOutIcon, SidebarIcon } from "lucide-react"
+import { useShallow } from "zustand/shallow"
 
 import { cn } from "@/lib/utils"
 import { cva } from "class-variance-authority"
-
-import Link from "next/link"
-import Image from "next/image"
+import { useRFIDSecurity } from "@/stores/use-rfid-security"
 
 import { Avatar, AvatarFallback } from "../ui/avatar"
-import { Card, CardDescription, CardHeader, CardTitle } from "../ui/card"
 import { ScrollArea } from "../ui/scroll-area"
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog"
+import { Button } from "../ui/button"
+import { AspectRatio } from "../ui/aspect-ratio"
 
 interface SidebarContextProps {
   isOpen: boolean
@@ -331,5 +343,87 @@ export function SidebarMenuItem({
       {children[0]}
       {isOpen ? children[1] : <></>}
     </Link>
+  )
+}
+
+export function ProtectedSidebarMenuItem({
+  children,
+  className,
+  url,
+  active,
+  ...rest
+}: SidebarMenuItemProps & React.ComponentProps<"button">) {
+  const { isOpen } = useSidebarContext()
+  const { setRegisteredIds } = useRFIDSecurity(
+    useShallow((state) => ({
+      setRegisteredIds: state.setRegisteredIds,
+    }))
+  )
+
+  const buttonStatus = active ? "active" : "default"
+  const isActive = buttonStatus === "active"
+
+  const router = useRouter()
+
+  const handleClick = () => {
+    if (isActive) return
+
+    setRegisteredIds({ [url]: url })
+    router.push(url)
+  }
+
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <button
+          className={cn(
+            sidebarMenuItemVariants({ status: buttonStatus, className })
+          )}
+          {...rest}
+          disabled={isActive}
+        >
+          {children[0]}
+          {isOpen ? children[1] : <></>}
+        </button>
+      </DialogTrigger>
+
+      <DialogContent showCloseButton={false}>
+        <DialogHeader>
+          <DialogTitle>Verfikasi Akses</DialogTitle>
+          <DialogDescription>
+            Verifikasi identitas anda terlebih dahulu sebelum masuk ke halaman
+            ini
+          </DialogDescription>
+        </DialogHeader>
+
+        <div className="flex flex-col items-center gap-4">
+          <p className="text-center text-sm text-muted-foreground">
+            Silahkan letakan kartu pekerja anda ke RFID scanner!
+          </p>
+
+          <div className="mx-auto w-full max-w-[80%] dark:opacity-50">
+            <AspectRatio ratio={1 / 1}>
+              <img
+                src="/assets/images/rfid-image.webp"
+                alt=""
+                aria-hidden="true"
+              />
+            </AspectRatio>
+          </div>
+
+          <DialogClose asChild>
+            <button onClick={handleClick}>Bypass</button>
+          </DialogClose>
+        </div>
+
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button variant="outline" className="w-full">
+              Batalkan
+            </Button>
+          </DialogClose>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   )
 }
