@@ -3,6 +3,7 @@
 import { useRouter, usePathname, useSearchParams } from "next/navigation"
 import { useDebouncedCallback } from "use-debounce"
 import { Input } from "../ui/input"
+import { SearchIcon } from "lucide-react"
 
 type Props = {
   placeholder?: string
@@ -27,11 +28,14 @@ export default function SearchFilter({ placeholder = "" }: Props) {
   }, 300)
 
   return (
-    <Input
-      placeholder={placeholder}
-      defaultValue={searchParams.get("search")?.toString()}
-      onChange={(e) => debouncedSearch(e.target.value)}
-      className="bg-card!"
-    />
+    <div className="relative">
+      <SearchIcon className="absolute top-1/2 left-2.5 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+      <Input
+        placeholder={placeholder}
+        defaultValue={searchParams.get("search")?.toString()}
+        onChange={(e) => debouncedSearch(e.target.value)}
+        className="bg-card! pl-9"
+      />
+    </div>
   )
 }

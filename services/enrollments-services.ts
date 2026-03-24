@@ -134,23 +134,38 @@ export const EnrollmentQuerySchema = z.object({
   ),
   search: z.string().optional().default(""),
   sort: z.string().optional().default("created_at"),
-  has_face: z.preprocess((val) => {
-    if (val === undefined || val === null || val === "") return true
-    if (typeof val === "string") return val === "true"
-    return Boolean(val)
+  sortDirection: z.string().optional().default("desc"),
+  enrolled: z.preprocess((val) => {
+    if (val === undefined || val === null || val === "") return true;
+    if (typeof val === "string") return val === "true";
+    return Boolean(val);
   }, z.boolean()),
+  not_enrolled: z.preprocess((val) => {
+    if (val === undefined || val === null || val === "") return true;
+    if (typeof val === "string") return val === "true";
+    return Boolean(val);
+  }, z.boolean()),
+}).transform((data) => {
+  let has_face: boolean | "all" | null = null;
+  if (data.enrolled && data.not_enrolled) has_face = "all";
+  else if (data.enrolled) has_face = true;
+  else if (data.not_enrolled) has_face = false;
+  
+  return { ...data, has_face };
 })
 
 export type EnrollmentQueryParams = z.infer<typeof EnrollmentQuerySchema>
 
 export async function fetchEnrollments(params: EnrollmentQueryParams) {
-  const { page, limit, search, sort } = EnrollmentQuerySchema.parse(params)
+  const { page, limit, search, sort, sortDirection, has_face } = EnrollmentQuerySchema.parse(params)
 
   const query = new URLSearchParams({
     page: page.toString(),
     limit: limit.toString(),
     search,
     sort,
+    sortDirection,
+    ...(has_face !== "all" && has_face !== null ? { has_face: has_face.toString() } : {}),
   })
 
   try {
@@ -189,4 +204,39 @@ export async function fetchEnrollments(params: EnrollmentQueryParams) {
   })
 
   return await mockApi
+}
+
+export async function fetchEnrollment(id: string) {
+  try {
+    // BFF Implementation: Call Golang API if configured
+    if (process.env.INTERNAL_GO_API) {
+      const res = await fetch(`${process.env.INTERNAL_GO_API}/v1/users/${id}`, {
+        headers: { Authorization: `Bearer ${process.env.GO_API_KEY}` },
+        cache: "no-store",
+      })
+
+      if (!res.ok) throw new Error(`Golang API unreachable: ${res.statusText}`)
+      return await res.json()
+    }
+  } catch (error) {
+    console.warn(
+      "BFF Error: Failed to fetch from Golang API, falling back to mock",
+      error
+    )
+  }
+
+  // Fallback for development since "it hasn't online yet"
+  const mockApi = new Promise((resolve) => {
+    setTimeout(() => {
+      const enrollment = fakeEnrollmentData.find((e) => e.id === id)
+      resolve(enrollment || null)
+    }, 300)
+  })
+
+  return (await mockApi) as {
+    id: string
+    name: string
+    nip: string
+    has_face: boolean
+  } | null
 }

@@ -7,6 +7,14 @@ import { useShallow } from "zustand/shallow"
 
 import { Button } from "@/components/ui/button"
 import TableHeaderQuickAction from "@/components/tables/table-header-quick-action"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import Link from "next/link"
 
 export const enrollmentTableColumns: ColumnDef<Enrollment>[] = [
   {
@@ -98,9 +106,9 @@ export const enrollmentTableColumns: ColumnDef<Enrollment>[] = [
       const isEnrolled = row.getValue("has_face")
 
       const badgeColor = {
-        enrolled:
-          "border-yellow-400 bg-yellow-300 text-yellow-900 dark:bg-yellow-200 dark:border-yellow-300",
         not_enrolled:
+          "border-yellow-400 bg-yellow-300 text-yellow-900 dark:bg-yellow-200 dark:border-yellow-300",
+        enrolled:
           "border-teal-400 bg-teal-300 text-teal-900 dark:bg-teal-200 dark:border-teal-300",
       }
 
@@ -120,13 +128,35 @@ export const enrollmentTableColumns: ColumnDef<Enrollment>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      const enrollment = row.original
+      const isEnrolled = row.original.has_face
 
       return (
-        <Button variant="ghost" size="icon-xs">
-          <MoreHorizontalIcon className="h-4 w-4" />
-          <span className="sr-only">Open menu</span>
-        </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon-xs">
+              <MoreHorizontalIcon className="h-4 w-4" />
+              <span className="sr-only">Open menu</span>
+            </Button>
+          </DropdownMenuTrigger>
+
+          <DropdownMenuContent align="end">
+            <DropdownMenuGroup>
+              {isEnrolled ? (
+                <DropdownMenuItem>
+                  <Link href={`/app/enrollment/update/${row.original.id}`}>
+                    Update wajah
+                  </Link>
+                </DropdownMenuItem>
+              ) : (
+                <DropdownMenuItem>
+                  <Link href={`/app/enrollment/new/${row.original.id}`}>
+                    Daftarkan wajah
+                  </Link>
+                </DropdownMenuItem>
+              )}
+            </DropdownMenuGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
       )
     },
   },
