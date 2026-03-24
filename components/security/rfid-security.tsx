@@ -63,7 +63,7 @@ export default function RFIDSecurity() {
   }
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog open={isOpen}>
       <DialogContent showCloseButton={false}>
         <DialogHeader>
           <DialogTitle>Verfikasi Akses</DialogTitle>
