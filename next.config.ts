@@ -23,6 +23,11 @@ const nextConfig: NextConfig = {
         destination: "/app/enrollment",
         permanent: true,
       },
+      {
+        source: "/app/enrollment/update",
+        destination: "/app/enrollment",
+        permanent: true,
+      },
     ]
   },
 }
