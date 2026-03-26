@@ -26,7 +26,7 @@ export default async function EnrollmentPage() {
       </div>
 
       <div className="h-full">
-        <ScrollArea className="h-[calc(100dvh-54px-24px)] min-h-0">
+        <ScrollArea className="h-[calc(100dvh-50px-24px)] min-h-0">
           <div className="py-10 pb-13">
             <EnrollmentListRenderer />
           </div>
