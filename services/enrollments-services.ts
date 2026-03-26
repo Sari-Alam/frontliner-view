@@ -123,41 +123,44 @@ const fakeEnrollmentData = [
   },
 ]
 
-export const EnrollmentQuerySchema = z.object({
-  page: z.preprocess(
-    (val) => (val === "" || val === undefined ? 1 : Number(val)),
-    z.number().min(1).default(1)
-  ),
-  limit: z.preprocess(
-    (val) => (val === "" || val === undefined ? 25 : Number(val)),
-    z.number().min(1).default(25)
-  ),
-  search: z.string().optional().default(""),
-  sort: z.string().optional().default("created_at"),
-  sortDirection: z.string().optional().default("desc"),
-  enrolled: z.preprocess((val) => {
-    if (val === undefined || val === null || val === "") return true;
-    if (typeof val === "string") return val === "true";
-    return Boolean(val);
-  }, z.boolean()),
-  not_enrolled: z.preprocess((val) => {
-    if (val === undefined || val === null || val === "") return true;
-    if (typeof val === "string") return val === "true";
-    return Boolean(val);
-  }, z.boolean()),
-}).transform((data) => {
-  let has_face: boolean | "all" | null = null;
-  if (data.enrolled && data.not_enrolled) has_face = "all";
-  else if (data.enrolled) has_face = true;
-  else if (data.not_enrolled) has_face = false;
-  
-  return { ...data, has_face };
-})
+export const EnrollmentQuerySchema = z
+  .object({
+    page: z.preprocess(
+      (val) => (val === "" || val === undefined ? 1 : Number(val)),
+      z.number().min(1).default(1)
+    ),
+    limit: z.preprocess(
+      (val) => (val === "" || val === undefined ? 25 : Number(val)),
+      z.number().min(1).default(25)
+    ),
+    search: z.string().optional().default(""),
+    sort: z.string().optional().default("created_at"),
+    sortDirection: z.string().optional().default("desc"),
+    enrolled: z.preprocess((val) => {
+      if (val === undefined || val === null || val === "") return true
+      if (typeof val === "string") return val === "true"
+      return Boolean(val)
+    }, z.boolean()),
+    not_enrolled: z.preprocess((val) => {
+      if (val === undefined || val === null || val === "") return true
+      if (typeof val === "string") return val === "true"
+      return Boolean(val)
+    }, z.boolean()),
+  })
+  .transform((data) => {
+    let has_face: boolean | "all" | null = null
+    if (data.enrolled && data.not_enrolled) has_face = "all"
+    else if (data.enrolled) has_face = true
+    else if (data.not_enrolled) has_face = false
+
+    return { ...data, has_face }
+  })
 
 export type EnrollmentQueryParams = z.infer<typeof EnrollmentQuerySchema>
 
 export async function fetchEnrollments(params: EnrollmentQueryParams) {
-  const { page, limit, search, sort, sortDirection, has_face } = EnrollmentQuerySchema.parse(params)
+  const { page, limit, search, sort, sortDirection, has_face } =
+    EnrollmentQuerySchema.parse(params)
 
   const query = new URLSearchParams({
     page: page.toString(),
@@ -165,7 +168,9 @@ export async function fetchEnrollments(params: EnrollmentQueryParams) {
     search,
     sort,
     sortDirection,
-    ...(has_face !== "all" && has_face !== null ? { has_face: has_face.toString() } : {}),
+    ...(has_face !== "all" && has_face !== null
+      ? { has_face: has_face.toString() }
+      : {}),
   })
 
   try {
@@ -239,4 +244,52 @@ export async function fetchEnrollment(id: string) {
     nip: string
     has_face: boolean
   } | null
+}
+
+export async function enrollFaceData({
+  id,
+  front,
+  left,
+  right,
+  up,
+  down,
+}: {
+  id: string
+  front: string
+  left: string
+  right: string
+  up: string
+  down: string
+}) {
+  try {
+    // BFF Implementation: Call Golang API if configured
+    if (process.env.INTERNAL_GO_API) {
+      const res = await fetch(`${process.env.INTERNAL_GO_API}/v1/users/${id}`, {
+        headers: { Authorization: `Bearer ${process.env.GO_API_KEY}` },
+        cache: "no-store",
+        method: "POST",
+        body: JSON.stringify({ front, left, right, up, down }),
+      })
+
+      if (!res.ok) throw new Error(`Golang API unreachable: ${res.statusText}`)
+      return await res.json()
+    }
+  } catch (error) {
+    console.warn(
+      "BFF Error: Failed to fetch from Golang API, falling back to mock",
+      error
+    )
+  }
+
+  // Fallback for development since "it hasn't online yet"
+  const mockApi = new Promise((resolve) => {
+    setTimeout(() => {
+      const enrollment = fakeEnrollmentData.map((e) =>
+        e.id === id ? { ...e, has_face: true } : e
+      )
+      resolve(enrollment || null)
+    }, 1000)
+  })
+
+  return await mockApi
 }
