@@ -107,7 +107,7 @@ export const enrollmentTableColumns: ColumnDef<Enrollment>[] = [
 
       const badgeColor = {
         not_enrolled:
-          "border-yellow-400 bg-yellow-300 text-yellow-900 dark:bg-yellow-200 dark:border-yellow-300",
+          "border-amber-400 bg-amber-300 text-amber-900 dark:bg-amber-200 dark:border-amber-300",
         enrolled:
           "border-teal-400 bg-teal-300 text-teal-900 dark:bg-teal-200 dark:border-teal-300",
       }
@@ -149,7 +149,7 @@ export const enrollmentTableColumns: ColumnDef<Enrollment>[] = [
                 </DropdownMenuItem>
               ) : (
                 <DropdownMenuItem>
-                  <Link href={`/app/enrollment/new/${row.original.id}`}>
+                  <Link href={`/app/enrollment/baru/${row.original.id}`}>
                     Daftarkan wajah
                   </Link>
                 </DropdownMenuItem>
