@@ -235,7 +235,7 @@ export async function fetchEnrollment(id: string) {
     setTimeout(() => {
       const enrollment = fakeEnrollmentData.find((e) => e.id === id)
       resolve(enrollment || null)
-    }, 300)
+    }, 1000)
   })
 
   return (await mockApi) as {
