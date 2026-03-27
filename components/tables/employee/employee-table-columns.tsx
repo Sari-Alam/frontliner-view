@@ -5,6 +5,18 @@ import { useEmployeeTableStore } from "@/stores/use-employee-table-store"
 import { useShallow } from "zustand/shallow"
 
 import TableHeaderQuickAction from "@/components/tables/table-header-quick-action"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogTrigger,
+  DialogFooter,
+  DialogClose,
+} from "@/components/ui/dialog"
+import { Button } from "@/components/ui/button"
+import { ScrollArea } from "@/components/ui/scroll-area"
 
 export const employeeTableColumns: ColumnDef<Employee>[] = [
   {
@@ -29,12 +41,68 @@ export const employeeTableColumns: ColumnDef<Employee>[] = [
     },
     cell: ({ row }) => {
       const visibleColumns = useEmployeeTableStore((s) => s.visibleColumns)
-      const isVisibles = visibleColumns.includes("name")
+      const isVisible = visibleColumns.includes("name")
+
+      const { name, nip, departement, position, has_face } = row.original
 
       return (
-        <div className={cn("px-3", !isVisibles && "hidden")}>
-          {row.getValue("name")}
-        </div>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button
+              variant="ghost"
+              className={cn(
+                "cursor-pointer bg-transparent! text-sm font-normal! hover:bg-transparent!",
+                isVisible ? "flex" : "hidden"
+              )}
+            >
+              {row.getValue("name")}
+            </Button>
+          </DialogTrigger>
+
+          <DialogContent showCloseButton={false}>
+            <DialogHeader>
+              <DialogTitle>Detail Karyawan</DialogTitle>
+              <DialogDescription>Informasi lengkap karyawan</DialogDescription>
+            </DialogHeader>
+
+            <div className="relative max-h-[30em]">
+              <ScrollArea className="h-full">
+                <div className="flex flex-col gap-1.5 py-4">
+                  <p className="text-sm font-medium">{name}</p>
+
+                  <div className="flex items-center gap-2 text-xs opacity-75">
+                    <span>{position.name}</span>
+                    <span>•</span>
+                    <span>NIP {nip}</span>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-6">
+                  <div className="flex flex-col gap-1.5">
+                    <span className="text-xs opacity-75">Departemen</span>
+                    <p className="overflow-hidden text-sm font-medium text-ellipsis">
+                      {departement.name}
+                    </p>
+                  </div>
+                  <div className="flex flex-col gap-1.5">
+                    <span className="text-xs opacity-75">Posisi</span>
+                    <p className="overflow-hidden text-sm font-medium text-ellipsis">
+                      {position.name}
+                    </p>
+                  </div>
+                </div>
+              </ScrollArea>
+            </div>
+
+            <DialogFooter>
+              <DialogClose asChild>
+                <Button variant="outline" className="w-full">
+                  Tutup
+                </Button>
+              </DialogClose>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       )
     },
   },

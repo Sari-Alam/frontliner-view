@@ -10,6 +10,7 @@ import {
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuGroup,
+  DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
@@ -49,6 +50,7 @@ export default function EmployeeTableColumnsVisibility() {
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-max" align="end">
         <DropdownMenuGroup>
+          <DropdownMenuLabel>Tampilkan kolom</DropdownMenuLabel>
           {columns.map((column) => (
             <DropdownMenuCheckboxItem
               key={column.value}
