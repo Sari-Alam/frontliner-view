@@ -28,12 +28,5 @@ export default function EnrollmentTableRenderer() {
 
   if (isError || !data) return <div>Failed to load data</div>
 
-  return (
-    <div>
-      <EnrollmentTable
-        columns={enrollmentTableColumns}
-        data={data.enrollments}
-      />
-    </div>
-  )
+  return <EnrollmentTable columns={enrollmentTableColumns} data={data.data} />
 }

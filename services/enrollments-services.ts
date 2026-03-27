@@ -123,43 +123,25 @@ const fakeEnrollmentData = [
   },
 ]
 
-export const EnrollmentQuerySchema = z
-  .object({
-    page: z.preprocess(
-      (val) => (val === "" || val === undefined ? 1 : Number(val)),
-      z.number().min(1).default(1)
-    ),
-    limit: z.preprocess(
-      (val) => (val === "" || val === undefined ? 25 : Number(val)),
-      z.number().min(1).default(25)
-    ),
-    search: z.string().optional().default(""),
-    sort: z.string().optional().default("created_at"),
-    sortDirection: z.string().optional().default("desc"),
-    enrolled: z.preprocess((val) => {
-      if (val === undefined || val === null || val === "") return true
-      if (typeof val === "string") return val === "true"
-      return Boolean(val)
-    }, z.boolean()),
-    not_enrolled: z.preprocess((val) => {
-      if (val === undefined || val === null || val === "") return true
-      if (typeof val === "string") return val === "true"
-      return Boolean(val)
-    }, z.boolean()),
-  })
-  .transform((data) => {
-    let has_face: boolean | "all" | null = null
-    if (data.enrolled && data.not_enrolled) has_face = "all"
-    else if (data.enrolled) has_face = true
-    else if (data.not_enrolled) has_face = false
-
-    return { ...data, has_face }
-  })
+export const EnrollmentQuerySchema = z.object({
+  page: z.preprocess(
+    (val) => (val === "" || val === undefined ? 1 : Number(val)),
+    z.number().min(1).default(1)
+  ),
+  limit: z.preprocess(
+    (val) => (val === "" || val === undefined ? 25 : Number(val)),
+    z.number().min(1).default(25)
+  ),
+  search: z.string().optional().default(""),
+  sort: z.string().optional().default("created_at"),
+  sortDirection: z.string().optional().default("desc"),
+  enrollment_status: z.string().optional().default("all"),
+})
 
 export type EnrollmentQueryParams = z.infer<typeof EnrollmentQuerySchema>
 
 export async function fetchEnrollments(params: EnrollmentQueryParams) {
-  const { page, limit, search, sort, sortDirection, has_face } =
+  const { page, limit, search, sort, sortDirection, enrollment_status } =
     EnrollmentQuerySchema.parse(params)
 
   const query = new URLSearchParams({
@@ -168,9 +150,7 @@ export async function fetchEnrollments(params: EnrollmentQueryParams) {
     search,
     sort,
     sortDirection,
-    ...(has_face !== "all" && has_face !== null
-      ? { has_face: has_face.toString() }
-      : {}),
+    enrollment_status: enrollment_status?.toString() || "all",
   })
 
   try {
@@ -198,7 +178,7 @@ export async function fetchEnrollments(params: EnrollmentQueryParams) {
   const mockApi = new Promise((resolve) => {
     setTimeout(() => {
       resolve({
-        enrollments: fakeEnrollmentData,
+        data: fakeEnrollmentData,
         pagination: {
           page,
           limit,

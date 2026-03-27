@@ -12,11 +12,12 @@ export default async function EnrollmentPage() {
         <MultiSelectFilter
           buttonLabel="Semua status enrollment"
           checkBoxLabel="Status Enrollment"
-          initialState={{ enrolled: true, not_enrolled: true }}
+          initialState={["1", "0"]}
           checkBoxItems={[
-            { label: "Terdaftar", value: "enrolled" },
-            { label: "Tidak terdaftar", value: "not_enrolled" },
+            { label: "Terdaftar", value: "1" },
+            { label: "Tidak terdaftar", value: "0" },
           ]}
+          searchParamsKey="enrollment_status"
         />
 
         <div className="flex items-center gap-2">
