@@ -1,5 +1,4 @@
 import AppBar from "@/components/app-bar/app-bar"
-import RFIDSecurity from "@/components/security/rfid-security"
 import AppSidebar from "@/components/sidebar/app-sidebar"
 
 export default function Layout({ children }: { children: React.ReactNode }) {
@@ -15,8 +14,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           </div>
         </main>
       </div>
-
-      <RFIDSecurity />
     </>
   )
 }
