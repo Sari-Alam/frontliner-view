@@ -40,11 +40,12 @@ export function LoginForm() {
       const response = await login(data)
       console.log(response)
       toast.success("Login berhasil")
-      router.push("/")
     } catch (error) {
       console.log(error)
       toast.error("Login gagal")
     }
+
+    router.push("/app")
   }
 
   const togglePasswordVisibility = () => {
