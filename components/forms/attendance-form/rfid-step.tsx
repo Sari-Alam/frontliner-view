@@ -2,7 +2,7 @@
 
 import z from "zod"
 import { toast } from "sonner"
-import { memo, useState, Dispatch, SetStateAction } from "react"
+import { memo, useState, Dispatch, SetStateAction, useEffect } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 
@@ -50,15 +50,25 @@ type SubStep1Props = {
 }
 
 function SubStep1({ setSubStep }: SubStep1Props) {
-  const { setEmployeeNIP, setEmployeeData, isLoading, setIsLoading } =
-    useAttendanceStore(
-      useShallow((s) => ({
-        setEmployeeNIP: s.setEmployeeNIP,
-        setEmployeeData: s.setEmployeeData,
-        isLoading: s.isLoading,
-        setIsLoading: s.setIsLoading,
-      }))
-    )
+  const {
+    setEmployeeNIP,
+    setEmployeeData,
+    isLoading,
+    setIsLoading,
+    employeeData,
+  } = useAttendanceStore(
+    useShallow((s) => ({
+      setEmployeeNIP: s.setEmployeeNIP,
+      setEmployeeData: s.setEmployeeData,
+      isLoading: s.isLoading,
+      setIsLoading: s.setIsLoading,
+      employeeData: s.employeeData,
+    }))
+  )
+
+  useEffect(() => {
+    if (employeeData) setSubStep(1)
+  }, [employeeData])
 
   const form = useForm<z.infer<typeof rfidSchema>>({
     resolver: zodResolver(rfidSchema),
@@ -168,7 +178,17 @@ type SubStep2Props = {
 }
 
 function SubStep2({ setSubStep, setFormCurrentStep }: SubStep2Props) {
-  const employeeData = useAttendanceStore((s) => s.employeeData)
+  const { employeeData, clearData } = useAttendanceStore(
+    useShallow((s) => ({
+      employeeData: s.employeeData,
+      clearData: s.clearData,
+    }))
+  )
+
+  const handleBackButton = () => {
+    clearData()
+    setSubStep(0)
+  }
 
   return (
     <>
@@ -224,7 +244,7 @@ function SubStep2({ setSubStep, setFormCurrentStep }: SubStep2Props) {
         <Button
           variant="outline"
           className="flex-1 cursor-pointer"
-          onClick={() => setSubStep(0)}
+          onClick={handleBackButton}
         >
           Bukan saya, scan ulang
         </Button>
