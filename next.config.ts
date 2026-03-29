@@ -30,6 +30,15 @@ const nextConfig: NextConfig = {
       },
     ]
   },
+  async rewrites() {
+    return [
+      {
+        source: "/api/proxy/:path*",
+        destination:
+          "https://core-api-dev.attendance.sarialamsukabumi-saas.com/:path*",
+      },
+    ]
+  },
 }
 
 export default nextConfig
