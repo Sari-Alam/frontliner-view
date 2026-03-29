@@ -327,7 +327,7 @@ export async function fetchEmployeeByNIP(nip: string) {
       resolve({
         data: fakeEmployees.find((employee) => employee.nip === nip),
       })
-    }, 300)
+    }, 1000)
   })
 
   return await mockApi

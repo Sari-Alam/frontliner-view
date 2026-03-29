@@ -1,4 +1,4 @@
-import z from "zod"
+import z, { string } from "zod"
 
 const EnrollmentSchema = z.object({
   id: z.string().uuid(),
@@ -27,6 +27,12 @@ const EmployeeSchema = z.object({
   }),
 })
 
+const Shift = z.object({
+  id: z.string(),
+  name: z.string(),
+})
+
 export type Enrollment = z.infer<typeof EnrollmentSchema>
 export type EmployeePosition = z.infer<typeof EmployeePositionSchema>
 export type Employee = z.infer<typeof EmployeeSchema>
+export type Shift = z.infer<typeof Shift>
