@@ -298,3 +298,37 @@ export async function fetchEmployees(params: GETRequestParams) {
 
   return await mockApi
 }
+
+export async function fetchEmployeeByNIP(nip: string) {
+  try {
+    // BFF Implementation: Call Golang API if configured
+    if (process.env.INTERNAL_GO_API) {
+      const res = await fetch(
+        `${process.env.INTERNAL_GO_API}/v1/users?nip=${nip}`,
+        {
+          headers: { Authorization: `Bearer ${process.env.GO_API_KEY}` },
+          cache: "no-store",
+        }
+      )
+
+      if (!res.ok) throw new Error(`Golang API unreachable: ${res.statusText}`)
+      return await res.json()
+    }
+  } catch (error) {
+    console.warn(
+      "BFF Error: Failed to fetch from Golang API, falling back to mock",
+      error
+    )
+  }
+
+  // Fallback for development since "it hasn't online yet"
+  const mockApi = new Promise((resolve) => {
+    setTimeout(() => {
+      resolve({
+        data: fakeEmployees.find((employee) => employee.nip === nip),
+      })
+    }, 300)
+  })
+
+  return await mockApi
+}
