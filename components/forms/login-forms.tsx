@@ -75,8 +75,7 @@ export function LoginForm() {
     setIsPasswordVisible(!isPasswordVisible)
   }
 
-  const isFormFilled =
-    form.getValues("nip").length && form.getValues("password").length
+  const isFormFilled = form.watch("nip").length && form.watch("password").length
 
   return (
     <div>
