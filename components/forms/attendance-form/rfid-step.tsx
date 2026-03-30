@@ -13,9 +13,9 @@ import { AspectRatio } from "../../ui/aspect-ratio"
 import { Input } from "../../ui/input"
 import { Field, FieldGroup, FieldLabel, FieldError } from "../../ui/field"
 import { useAttendanceStore } from "@/stores/attendance-store"
-import { fetchEmployeeByNIP } from "@/services/employee-services"
 import { useShallow } from "zustand/shallow"
 import { Spinner } from "@/components/ui/spinner"
+import { fetchEnrollment } from "@/services/enrollments-services"
 
 const rfidSchema = z.object({
   nip: z
@@ -70,6 +70,47 @@ function SubStep1({ setSubStep }: SubStep1Props) {
     if (employeeData) setSubStep(1)
   }, [employeeData])
 
+  let buffer = ""
+  let lastKeyTime = Date.now()
+
+  useEffect(() => {
+    const handleKeyDown = async (e: KeyboardEvent) => {
+      const currentTime = Date.now()
+
+      if (currentTime - lastKeyTime > 30) {
+        buffer = ""
+      }
+
+      if (e.key === "Enter") {
+        if (buffer.length > 0) {
+          setIsLoading(true)
+
+          const employee = await fetchEnrollment(buffer)
+          setIsLoading(false)
+
+          console.log({ buffer, employee })
+
+          if (employee) {
+            form.setValue("nip", buffer)
+            setEmployeeNIP(buffer)
+            setEmployeeData(employee)
+            setSubStep(1)
+          } else {
+            toast.error("Pegawai tidak ditemukan")
+            setSubStep(2)
+          }
+
+          buffer = "" // Clear for next scan
+        }
+      } else buffer += e.key
+
+      lastKeyTime = currentTime
+    }
+
+    window.addEventListener("keydown", handleKeyDown)
+    return () => window.removeEventListener("keydown", handleKeyDown)
+  }, [])
+
   const form = useForm<z.infer<typeof rfidSchema>>({
     resolver: zodResolver(rfidSchema),
     defaultValues: {
@@ -80,12 +121,12 @@ function SubStep1({ setSubStep }: SubStep1Props) {
   async function onSubmit(data: z.infer<typeof rfidSchema>) {
     try {
       setIsLoading(true)
-      const employee = await fetchEmployeeByNIP(data.nip)
+      const employee = await fetchEnrollment(data.nip)
 
-      if (employee.data) {
+      if (employee) {
         setSubStep(1)
         setEmployeeNIP(data.nip)
-        setEmployeeData(employee.data)
+        setEmployeeData(employee)
       } else {
         toast.error("Pegawai tidak ditemukan")
         setSubStep(2)

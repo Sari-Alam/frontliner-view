@@ -25,6 +25,16 @@ const EmployeeSchema = z.object({
     id: z.string(),
     name: z.string(),
   }),
+  face_data: z.object({
+    id: z.string(),
+    face_descriptor: z.object({
+      left: z.string(),
+      front: z.string(),
+      right: z.string(),
+      up: z.string(),
+      down: z.string(),
+    }),
+  }),
 })
 
 const Shift = z.object({

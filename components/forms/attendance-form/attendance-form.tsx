@@ -46,7 +46,7 @@ function LoadingIndicator() {
   return (
     <div
       className={cn(
-        "absolute top-1/2 left-1/2 z-1 w-full -translate-x-1/2 -translate-y-1/2 animate-spin opacity-5 duration-1000 fill-mode-forwards dark:opacity-10",
+        "absolute top-1/2 left-1/2 z-1 w-full max-w-7xl -translate-x-1/2 -translate-y-1/2 animate-spin opacity-5 duration-1000 fill-mode-forwards dark:opacity-10",
         !isLoading && "paused"
       )}
     >
