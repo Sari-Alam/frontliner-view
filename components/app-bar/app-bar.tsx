@@ -1,3 +1,4 @@
+import { FullscreenToggle } from "../full-screen-toggler"
 import { ThemeToggler } from "../theme-toggler"
 import AppBarBreadcrumb from "./app-bar-breadcrumbs"
 
@@ -7,6 +8,7 @@ export default function AppBar() {
       <AppBarBreadcrumb />
 
       <div className="flex items-center gap-2">
+        <FullscreenToggle />
         <ThemeToggler />
       </div>
     </div>
