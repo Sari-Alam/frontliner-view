@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import Webcam from "react-webcam"
 import { cn } from "@/lib/utils"
 
@@ -71,7 +71,7 @@ export default function FaceEnrollmentForm({
   }
 
   return (
-    <div className="flex gap-4">
+    <div className="mx-auto flex w-full items-center justify-center gap-4">
       <Instructions />
       <Form
         capturedImages={capturedImages}
@@ -134,6 +134,8 @@ function Form({ captureImage, enrolledData, capturedImages }: FormProps) {
   const isFinishedTakingPicture = currentStep + 1 === 7
 
   const capture = useCallback(() => {
+    console.log(webcamRef.current)
+
     const imageSrc = webcamRef.current?.getScreenshot()
     if (!imageSrc) return
 
@@ -172,18 +174,18 @@ function Form({ captureImage, enrolledData, capturedImages }: FormProps) {
   }
 
   return (
-    <Card className="w-[492px]">
+    <Card className="w-full max-w-5xl">
       <CardContent>
-        <AspectRatio ratio={1 / 1} className="relative">
+        <AspectRatio ratio={16 / 11} className="relative">
           <Webcam
             audio={false}
             ref={webcamRef}
             screenshotFormat="image/jpeg"
             screenshotQuality={0.85}
-            className="h-[460px] w-[460px] rotate-y-180 overflow-hidden rounded-md object-cover"
+            className="h-[680px] w-[992px] rotate-y-180 overflow-hidden rounded-md object-cover"
             videoConstraints={{
-              width: 100,
-              height: 100,
+              width: 400,
+              height: 400,
               facingMode: "user",
             }}
           />
@@ -264,7 +266,7 @@ function CameraOverlay() {
 
 function Instructions() {
   return (
-    <Card className="h-max w-[132px]">
+    <Card className="mt-10 h-max w-[132px]">
       <CardContent className="space-y-4">
         <div className="bg-card-muted">
           <AspectRatio
@@ -362,7 +364,7 @@ function PreviewCard({ imgSrc }: PreviewCardProps) {
         </Button>
       </DialogTrigger>
 
-      <DialogContent showCloseButton={false}>
+      <DialogContent showCloseButton={false} className="w-full max-w-lg">
         <DialogHeader className="sr-only">
           <DialogTitle>Foto</DialogTitle>
         </DialogHeader>

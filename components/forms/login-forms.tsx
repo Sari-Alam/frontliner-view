@@ -63,12 +63,12 @@ export function LoginForm() {
             control={form.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor="login-form-title">
+                <FieldLabel htmlFor="login-form-nip">
                   Nomor Induk Pegawai (NIP)
                 </FieldLabel>
                 <Input
                   {...field}
-                  id="login-form-title"
+                  id="login-form-nip"
                   aria-invalid={fieldState.invalid}
                   placeholder="Masukkan NIP Anda"
                   autoComplete="off"
@@ -84,13 +84,11 @@ export function LoginForm() {
             control={form.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor="login-form-description">
-                  Password
-                </FieldLabel>
+                <FieldLabel htmlFor="login-form-password">Password</FieldLabel>
                 <div className="relative">
                   <Input
                     {...field}
-                    id="login-form-title"
+                    id="login-form-password"
                     aria-invalid={fieldState.invalid}
                     placeholder="Masukkan Password Anda"
                     autoComplete="off"
